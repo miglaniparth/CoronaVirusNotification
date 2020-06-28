@@ -12,17 +12,17 @@ def notify(mystr):
 
 
 if __name__ == '__main__':
-    url = ("https://corona-virus-stats.herokuapp.com/api/v1/cases/countries-search?search=india")
+    url = ("https://corona.lmao.ninja/v2/countries/India?yesterday&strict&query")
+    response = requests.get(url)
+    var = response.json()
+    print(var)
     while True:
         response = requests.get(url)
         var = response.json()
-        d1=var['data']
-        l1=d1['rows']
-        d2=l1[0]
         mystr=f'''
-Total Cases = {d2['total_cases']}
-Active Cases = {d2['active_cases']}
-Total Deaths = {d2['total_deaths']}
+Total Cases = {var['cases']}
+Active Cases = {var['active']}
+Total Deaths = {var['deaths']}
 Source : API from postman.com'''
         notify(mystr)
         time.sleep(60*60)
