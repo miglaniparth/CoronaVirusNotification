@@ -23,6 +23,6 @@ if __name__ == '__main__':
 Total Cases = {var['cases']}
 Active Cases = {var['active']}
 Total Deaths = {var['deaths']}
-Source : API from postman.com'''
+Source : NovelCOVID API'''
         notify(mystr)
         time.sleep(60*60)
