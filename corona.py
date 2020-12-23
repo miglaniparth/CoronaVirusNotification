@@ -13,12 +13,10 @@ def notify(mystr):
 
 if __name__ == '__main__':
     url = ("https://corona.lmao.ninja/v2/countries/India?yesterday&strict&query")
-    response = requests.get(url)
-    var = response.json()
-    print(var)
     while True:
         response = requests.get(url)
         var = response.json()
+        print(var)
         mystr=f'''
 Total Cases = {var['cases']}
 Active Cases = {var['active']}
