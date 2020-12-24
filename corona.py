@@ -1,26 +1,41 @@
 from plyer import notification
 import requests
+from bs4 import BeautifulSoup
 import time
 
-
-def notify(mystr):
+def notifyMe(title, message):
     notification.notify(
-        title='  COVID-19 Update for INDIA',
-        message=mystr,
-        app_icon='C:\\Users\\parth\\Downloads\\corona-virus-568595.ico',
-        timeout=10)
+        title = title,
+        message = message,
+        app_icon = "icon.ico",
+        timeout = 6
+    )
 
 
-if __name__ == '__main__':
-    url = ("https://corona.lmao.ninja/v2/countries/India?yesterday&strict&query")
+def getData(url):
+    r = requests.get(url)
+    return r.text
+
+
+if _name_ == "_main_":
     while True:
-        response = requests.get(url)
-        var = response.json()
-        print(var)
-        mystr=f'''
-Total Cases = {var['cases']}
-Active Cases = {var['active']}
-Total Deaths = {var['deaths']}
-Source : NovelCOVID API'''
-        notify(mystr)
-        time.sleep(60*60)
+        # notifyMe("Harry", "Lets stop the spread of this virus together")
+        myHtmlData = getData('https://www.mohfw.gov.in/')
+
+        soup = BeautifulSoup(myHtmlData, 'html.parser')
+        # print(soup.prettify())
+        myDataStr = ""
+        for tr in soup.find_all('tbody')[1].find_all('tr'):
+            myDataStr += tr.get_text()
+        myDataStr = myDataStr[1:]
+        itemList = myDataStr.split("\n\n")
+
+        states = ['Chandigarh', 'Telengana', 'Uttar Pradesh']
+        for item in itemList[0:22]:
+            dataList = item.split('\n')
+            if dataList[1] in states: 
+                nTitle = 'Cases of Covid-19'
+                nText = f"State {dataList[1]}\nIndian : {dataList[2]} & Foreign : {dataList[3]}\nCured :  {dataList[4]}\nDeaths :  {dataList[5]}"
+                notifyMe(nTitle, nText)
+                time.sleep(2)
+        time.sleep(3600)
